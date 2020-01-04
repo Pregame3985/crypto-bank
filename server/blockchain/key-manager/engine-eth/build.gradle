@@ -1,0 +1,6 @@
+dependencies {
+
+    compile project(":engine-base")
+    compile "org.web3j:crypto:${web3jVersion}"
+
+}

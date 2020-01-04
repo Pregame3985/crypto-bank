@@ -1,0 +1,37 @@
+buildscript {
+    ext {
+        springBootVersion = "2.1.3.RELEASE"
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: "application"
+apply plugin: "maven"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "org.springframework.boot"
+
+mainClassName = "com.mcb.address.manager.Application"
+[distTar, distZip, bootDistTar, bootDistZip]*.enabled = false
+
+dependencies {
+
+    compile project(":engine-base")
+    compile project(":engine-btc")
+    compile project(":engine-eth")
+    compile project(":engine-bch")
+
+    compile "mysql:mysql-connector-java:${mysqlConnectorVersion}"
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    compile "org.springframework.cloud:spring-cloud-gcp-starter-pubsub:1.1.2.RELEASE"
+    compile "org.springframework.integration:spring-integration-core"
+}

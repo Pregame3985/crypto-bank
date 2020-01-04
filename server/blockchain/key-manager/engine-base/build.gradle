@@ -1,0 +1,8 @@
+dependencies {
+
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+    compile "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}"
+    compile "com.madgag.spongycastle:prov:${spongycastleVersion}"
+
+}

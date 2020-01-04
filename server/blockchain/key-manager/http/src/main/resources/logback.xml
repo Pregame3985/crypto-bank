@@ -1,0 +1,19 @@
+<configuration scan="false" scanPeriod="60000" debug="false">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyyMMdd HHmmss.SSS}]-[%thread %logger{30}]-[%msg]%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.mcb" level="${LOG_LEVEL_MCB}" additivity="true"/>
+    <logger name="com.google" level="${LOG_LEVEL_GOOGLE}" additivity="true"/>
+    <logger name="org.springframework" level="${LOG_LEVEL_SPRING}" additivity="true"/>
+    <logger name="org.hibernate" level="${LOG_LEVEL_HIBERNATE}" additivity="true"/>
+    <!--<logger name="reactor.ipc.netty" level="DEBUG" additivity="true"/>-->
+    <!--<logger name="reactor.ipc.netty.channel.ChannelOperationsHandler" level="DEBUG" additivity="true"/>-->
+
+    <root level="${LOG_LEVEL_ROOT}">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

@@ -1,0 +1,6 @@
+dependencies {
+
+    compile project(':engine-base')
+
+    testCompile project(':engine-base').sourceSets.test.output
+}

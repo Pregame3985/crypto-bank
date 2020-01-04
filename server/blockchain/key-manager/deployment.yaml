@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: APP_NAME
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    name: http
+    targetPort: 8080
+  selector:
+    app: MY_PROJECT
+    tier: MY_APPNAME
+    rank: MY_NAMESPACE
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: APP_NAME
+spec:
+  replicas: REPLICA
+  #minReadySeconds: 60
+  selector:
+    matchLabels:
+      app: MY_PROJECT
+      tier: MY_APPNAME
+      rank: MY_NAMESPACE
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: MY_PROJECT
+        tier: MY_APPNAME
+        rank: MY_NAMESPACE
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: tier
+                  operator: In
+                  values:
+                  - MY_APPNAME
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: MY_APPNAME
+          image: IMAGE_SHA
+          imagePullPolicy: Always
+          command: [ "/bin/sh", "-c", "--" ]
+          args: [ "cd / ; java -jar app.jar" ]
+          resources:
+            limits:
+              cpu: 300m
+              memory: 1300Mi
+            requests:
+              cpu: 100m
+              memory: 1200Mi
+          env:
+            - name: GET_HOSTS_FROM
+              value: dns
+            - name: LOG_LEVEL_ROOT
+              value: INFO 
+            - name: LOG_LEVEL_ZDX
+              value: DEBUG
+            - name: LOG_LEVEL_SPRING
+              value: ERROR
+            - name: LOG_LEVEL_HIBERNATE
+              value: INFO
+            - name: LOG_LEVEL_GOOGLE
+              value: INFO
+            - name: LOG_LEVEL_REACTOR
+              value: ERROR 
+            - name: JAVA_OPTS
+              value: -DLOG_LEVEL=INFO
+            - name: _JAVA_OPTIONS
+              value: -Xmx1000M -Xms1000M -Dspring.config.location=/root/spring-config.yml
+          volumeMounts:
+            - name: app-config
+              mountPath: /root
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+                  #httpGet:
+                  #path: /healthz
+                  #port: 8627
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 150
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 240
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+      volumes:
+        - name: app-config
+          configMap:
+            name: APP_NAME
+      imagePullSecrets:
+        - name: sre-registry-zdx

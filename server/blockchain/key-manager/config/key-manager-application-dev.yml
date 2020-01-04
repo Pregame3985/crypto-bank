@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: Key Manager
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/my_crypto_bank?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    username: mcb
+    password: Hs%UtmtV@6uvcEJzG4TSn298uz*nAk76
+    hikari:
+      pool-name: key-pool
+      connection-test-query: SELECT 1 FROM DUAL
+      minimum-idle: 1
+      maximum-pool-size: 5
+      auto-commit: false
+  jackson:
+    default-property-inclusion: non_null
+    serialization.write_dates_as_timestamps: true
+  jpa:
+    show-sql: false
+    hibernate:
+      naming:
+        physical-strategy: com.mcb.address.manager.util.RealNamingStrategyImpl
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: false
+app:
+  chain:
+    network: 1
