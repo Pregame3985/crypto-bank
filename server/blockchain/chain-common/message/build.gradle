@@ -1,0 +1,8 @@
+dependencies {
+
+    compile 'com.google.cloud:google-cloud-pubsub:1.64.0'
+    compile 'org.springframework.amqp:spring-rabbit:2.1.6.RELEASE'
+
+    compile 'org.springframework:spring-context:5.1.5.RELEASE'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+}

@@ -1,0 +1,11 @@
+dependencies {
+
+    compile project(":chain")
+    compile project(":chain-utxo")
+
+    compile "com.tokimi.chain-common:base:${chainCommonVersion}"
+    compile "com.tokimi.chain-common:signature:${chainCommonVersion}"
+
+    compile "com.tokimi:engine-base:${walletEngineVersion}"
+
+}

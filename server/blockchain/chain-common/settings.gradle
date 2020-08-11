@@ -1,0 +1,8 @@
+rootProject.name = 'chain-common'
+
+include 'base'
+include 'network'
+include 'message'
+include 'pubsub'
+include 'rabbitmq'
+include 'signature'

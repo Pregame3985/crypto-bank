@@ -1,0 +1,102 @@
+server:
+  servlet:
+    context-path: /eth
+spring:
+  application:
+    name: Ethereum Manager
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://dev-postgresql.infra.svc.cluster.local:5432/blockchain
+    username: postgres
+    password: "&4ns6W1p7%"
+    hikari:
+      pool-name: eth-db-pool
+      connection-test-query: SELECT 1
+      minimum-idle: 1
+      maximum-pool-size: 5
+      auto-commit: false
+      max-lifetime: 18000000
+  jackson:
+    default-property-inclusion: non_null
+    serialization.write_dates_as_timestamps: true
+  jpa:
+#    generate-ddl: true
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
+        format_sql: true
+management:
+  endpoint:
+    health:
+      show-details: always
+  health:
+    rabbit:
+      enabled: false
+#    defaults:
+#      enabled: false
+#    consul:
+#      enabled: false
+#  security:
+#    enabled: false
+app:
+  function:
+    sync: false
+    deposit: false
+    withdraw: true
+    sweep: false
+  chain:
+    fetch-count: 50
+    catch-mode: true
+    sync-from: 7896000
+    id: 2
+    gasId: 2
+    feeScale: 1.0
+    network: 1
+    includeChildren: true
+    node:
+      network:
+        url: https://ropsten.infura.io/v3/66ccc7e0f93d4d72b67ecfbe50847dda
+  tasks:
+    fee:
+      schedule:
+        initialDelay: 100 # 100 seconds
+        fixedDelay: 600_000 # 10 seconds
+    syncBlock:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s
+      retry:
+        maxAttempts: 100_000
+        backoff:
+          delay: 2_000 # 2 seconds
+    deposit:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s
+      retry:
+        maxAttempts: 100_000
+        backoff:
+          delay: 2_000 # 2 seconds
+    depositVerify:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s
+      retry:
+        maxAttempts: 100_000
+        backoff:
+          delay: 2_000 # 2 seconds
+    withdrawAudit:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 5_000 # 5 s
+    withdraw:
+      schedule:
+        initialDelay: 1000 # 1000 ms
+        fixedDelay: 10_000 # 300 s
+    withdrawVerify:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s

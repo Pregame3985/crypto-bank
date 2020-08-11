@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: APP_NAME
+  namespace: APP_NAMESPACE
+spec:
+  type: NodePort
+  ports:
+    - port: MY_PORT
+      name: http
+      targetPort: MY_PORT
+  selector:
+    app: MY_PROJECT
+    tier: MY_APPNAME
+    rank: MY_NAMESPACE
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: APP_NAME
+  namespace: APP_NAMESPACE
+spec:
+  replicas: REPLICA
+  selector:
+    matchLabels:
+      app: MY_PROJECT
+      tier: MY_APPNAME
+      rank: MY_NAMESPACE
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: MY_PROJECT
+        tier: MY_APPNAME
+        rank: MY_NAMESPACE
+    spec:
+      containers:
+        - name: MY_APPNAME
+          image: IMAGE_SHA
+          imagePullPolicy: Always
+          command: [ "/bin/sh", "-c", "--" ]
+          args: [ "cd / ; java -jar app.jar" ]
+          resources:
+            limits:
+              memory: 800Mi
+            requests:
+              memory: 600Mi
+          envFrom:
+            - configMapRef:
+                name: env-cm
+          env:
+            - name: _JAVA_OPTIONS
+              value: -Xlog:gc* -XX:+UseSerialGC -Xmx700M -Xms600M -Xss512k -Duser.timezone=Asia/Shanghai
+          ports:
+            - name: service-port
+              containerPort: MY_PORT
+          readinessProbe:
+            httpGet:
+              path: /eth/actuator/health
+              port: service-port
+            initialDelaySeconds: 30
+            periodSeconds: 5

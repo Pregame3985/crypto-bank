@@ -1,0 +1,91 @@
+server:
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: Ethereum Manager
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1 FROM DUAL
+      minimum-idle: 1
+      maximum-pool-size: 5
+      auto-commit: false
+      pool-name: eth-db-pool
+    url: jdbc:mysql://dev-mysql.dev.svc.cluster.local:3306/tokimi_dev?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: 9GffWwPXAe
+  jackson:
+    default-property-inclusion: NON_NULL
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      naming:
+        physical-strategy: com.tokimi.config.MyPhysicalNamingStrategy
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        cache:
+         use_second_level_cache: false
+  rabbitmq:
+    host: dev-rabbitmq.dev.svc.cluster.local
+    port: 5672
+    username: dev
+    password: yYTWfSw7WK
+app:
+  chain:
+    fetchCount: 50
+    catchMode: true
+    syncFrom: 6720000
+    id: 2 
+    gasId: 2
+    feeScale: 1.0
+    network: 1
+    includeChildren: false
+    node:
+      network:
+        url: https://ropsten.infura.io/v3/a13b47f928b14e81b14f1473385f24eb
+  tasks:
+    fee:
+      schedule:
+        initialDelay: 100 # 100 seconds
+        fixedDelay: 600_000 # 10 seconds
+    syncBlock:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s
+      retry:
+        maxAttempts: 100_000
+        backoff:
+          delay: 2_000 # 2 seconds
+    deposit:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s
+      retry:
+        maxAttempts: 100_000
+        backoff:
+          delay: 2_000 # 2 seconds
+    depositVerify:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s
+      retry:
+        maxAttempts: 100_000
+        backoff:
+          delay: 2_000 # 2 seconds
+    withdrawAudit:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 5_000 # 5 s
+    withdraw:
+      schedule:
+        initialDelay: 1000 # 1000 ms
+        fixedDelay: 10_000 # 300 s
+    withdrawVerify:
+      schedule:
+        initialDelay: 100 # 100 ms
+        fixedDelay: 10_000 # 10 s

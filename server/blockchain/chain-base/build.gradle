@@ -1,0 +1,80 @@
+plugins {
+    id 'base'
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+
+    description = "Tokimi Blockchain Base"
+    group = "com.tokimi.chain-base"
+    version = "0.0.2"
+
+    ext {
+        lombokVersion = '1.18.6'
+        slf4jVersion = '1.7.26'
+        chainCommonVersion = '0.0.2'
+        walletEngineVersion = '0.0.2'
+    }
+
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven {
+            url "http://repo.spring.io/libs-milestone"
+        }
+//        maven {
+//            url "https://nexus.sre.shusj.com/repository/maven-public/"
+//            credentials {
+//                username "$tokimiPullUser"
+//                password "$tokimiPullPassword"
+//            }
+//        }
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, "seconds"
+        resolutionStrategy.cacheDynamicVersionsFor 0, "seconds"
+    }
+
+    dependencies {
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    }
+
+//    uploadArchives {
+//        repositories {
+//            mavenDeployer {
+//                repository(url: 'https://nexus.sre.shusj.com/repository/maven-releases/') {
+//                    authentication(userName: "$tokimiPushUser", password: "$tokimiPushPassword")
+//                }
+//                snapshotRepository(url: 'https://nexus.sre.shusj.com/repository/maven-snapshots/') {
+//                    authentication(userName: "$tokimiPushUser", password: "$tokimiPushPassword")
+//                }
+//            }
+//        }
+//    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        archiveClassifier.set("sources")
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+//    defaultTasks 'uploadArchives'
+
+    test {
+        exclude "**/*"
+    }
+}

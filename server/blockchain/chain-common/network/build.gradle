@@ -1,0 +1,13 @@
+dependencies {
+
+    compile project(":base")
+
+    compile 'org.springframework:spring-webflux:5.2.0.RELEASE'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+
+    testCompile "org.springframework.boot:spring-boot-starter-test:2.2.0.RELEASE"
+    testCompile 'io.projectreactor.netty:reactor-netty:0.8.5.RELEASE'
+    testCompile group: 'io.projectreactor', name: 'reactor-test', version: '3.2.6.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+}

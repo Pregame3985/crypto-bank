@@ -1,0 +1,12 @@
+dependencies {
+
+    compile project(":chain")
+    compile "com.tokimi.chain-common:message:${chainCommonVersion}"
+
+    compile "org.springframework.data:spring-data-jpa:2.1.5.RELEASE"
+    implementation "com.github.wenhao:jpa-spec:3.2.5"
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final"
+    compile "javax.transaction:javax.transaction-api:1.3"
+
+    compile "com.tokimi:engine-base:${walletEngineVersion}"
+}
